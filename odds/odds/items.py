@@ -8,7 +8,12 @@
 import scrapy
 
 
-class OddsItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class EventItem(scrapy.Item):
+    event_id = scrapy.Field()
+    event_name = scrapy.Field()
+    event_date = scrapy.Field()
+
+
+class FighterItem(scrapy.Item):
+    fighter_id = scrapy.Field()
+    fighter_name = scrapy.Field()
