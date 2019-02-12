@@ -21,13 +21,16 @@ class OddsPipeline(object):
     def process_item(self, item, spider):
         cur = self.conn.cursor()
         if isinstance(item, FighterItem):
-            cur.execute('''insert into fighters(id, fighter_name) values (%s, %s);''', [
-                item['fighter_id'],
-                item['fighter_name']
-            ])
-            self.conn.commit()
+            try:
+                cur.execute('''insert into fighters(id, fighter_name) values (%s, %s);''', [
+                    item['fighter_id'],
+                    item['fighter_name']
+                ])
+                self.conn.commit()
+            except psycopg2.IntegrityError and psycopg2.InternalError:
+                print('This fighter is already stored in database')
         elif isinstance(item, EventItem):
-            if item is not None:
+            try:
                 cur.execute('''insert into events (id, event_name, event_date, fighter_ids) values (%s, %s, %s, %s);''',
                             [
                                 item['event_id'],
@@ -36,5 +39,7 @@ class OddsPipeline(object):
                                 item['fighters_id']
                             ])
                 self.conn.commit()
+            except psycopg2.IntegrityError and psycopg2.InternalError:
+                print('This event is already stored in database')
 
         return item
