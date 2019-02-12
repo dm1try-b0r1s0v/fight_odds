@@ -12,6 +12,7 @@ class EventItem(scrapy.Item):
     event_id = scrapy.Field()
     event_name = scrapy.Field()
     event_date = scrapy.Field()
+    fighters_id = scrapy.Field()
 
 
 class FighterItem(scrapy.Item):

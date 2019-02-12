@@ -9,6 +9,7 @@ class FightOddsSpider(scrapy.Spider):
 
     def parse(self, response):
         event = EventItem()
+        fighters_id = []
 
         # get event id from event link
         event_link = response.css('div.table-header a::attr(href)').extract_first()
@@ -20,8 +21,6 @@ class FightOddsSpider(scrapy.Spider):
 
         # get event date
         event['event_date'] = response.css('span.table-header-date::text').extract_first()
-
-        yield event
 
         fighter = FighterItem()
 
@@ -38,8 +37,14 @@ class FightOddsSpider(scrapy.Spider):
                 if fighter_id != '#':
                     fighter['fighter_id'] = int(fighter_id)
                     fighter['fighter_name'] = fighter_name
+                    fighters_id.append(fighter['fighter_id'])
 
                     yield fighter
 
             except AttributeError:
                 pass
+
+        # get all fighters id
+        event['fighters_id'] = fighters_id
+
+        yield event
