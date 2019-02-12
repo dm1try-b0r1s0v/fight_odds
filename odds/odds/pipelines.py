@@ -17,7 +17,6 @@ class OddsPipeline(object):
             password='VJAW7UC3x3MtSsxnaOsCTMQv0zCtRdUT',
             dbname='vimfzmjn',
         )
-        self.fighters_id = []
 
     def process_item(self, item, spider):
         cur = self.conn.cursor()
@@ -26,7 +25,6 @@ class OddsPipeline(object):
                 item['fighter_id'],
                 item['fighter_name']
             ])
-            self.fighters_id.append(item['fighter_id'])
             self.conn.commit()
         elif isinstance(item, EventItem):
             if item is not None:
